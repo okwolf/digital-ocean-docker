@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Make sure required environment variables are set
+: "${DO_TOKEN?}"
+: "${DO_SSH_KEY_FINGERPRINT?}"
+: "${DO_DOCKER_BUILD_REPO?}"
+: "${DO_DOCKER_RUN_OPTIONS?}"
+
 DO_API_URL=https://api.digitalocean.com/v2/droplets
 
 DROPLET_NAME=$(openssl rand -hex 6)
@@ -9,7 +15,7 @@ docker build -t deployment $DO_DOCKER_BUILD_REPO
 docker run --restart=always $DO_DOCKER_RUN_OPTIONS deployment
 EOF
 )
-DROPLET_CREATE_RESULT=`curl -s -X POST "$DO_API_URL" \
+DROPLET_CREATE_RESULT=$(curl -s -X POST "$DO_API_URL" \
 	-d'{"name":"'"$DROPLET_NAME"'",
 	"region":"sfo1",
 	"size":"512mb",
@@ -18,22 +24,22 @@ DROPLET_CREATE_RESULT=`curl -s -X POST "$DO_API_URL" \
 	"user_data":"'"$USER_DATA"'",
 	"ssh_keys":[ "'$DO_SSH_KEY_FINGERPRINT'" ]}' \
      -H "Authorization: Bearer $DO_TOKEN" \
-     -H "Content-Type: application/json"`
+     -H "Content-Type: application/json")
 
-DROPLET_CREATE_STATUS=`echo $DROPLET_CREATE_RESULT | jq -r '.droplet.status'`
+DROPLET_CREATE_STATUS=$(echo $DROPLET_CREATE_RESULT | jq -r '.droplet.status')
 if [ "$DROPLET_CREATE_STATUS" != "new" ]; then
     echo "$(tput setaf 1)ERROR! Something went wrong during creation:"
     echo $DROPLET_CREATE_RESULT | jq .
     exit 1
 fi
-DROPLET_ID=`echo $DROPLET_CREATE_RESULT | jq '.droplet.id'`
+DROPLET_ID=$(echo $DROPLET_CREATE_RESULT | jq '.droplet.id')
 echo "Droplet $DROPLET_NAME with ID $DROPLET_ID created!"
 echo -n "Waiting for Droplet $DROPLET_NAME to boot"
 for i in {1..60}; do
-	DROPLET_STATUS_RESULT=`curl -s -X GET "$DO_API_URL/$DROPLET_ID" \
+	DROPLET_STATUS_RESULT=$(curl -s -X GET "$DO_API_URL/$DROPLET_ID" \
 	-H "Authorization: Bearer $DO_TOKEN" \
-	-H "Content-Type: application/json"`
-    DROPLET_STATUS=`echo $DROPLET_STATUS_RESULT | jq -r '.droplet.status'`
+	-H "Content-Type: application/json")
+    DROPLET_STATUS=$(echo $DROPLET_STATUS_RESULT | jq -r '.droplet.status')
     if [ "$DROPLET_STATUS" == 'active' ]; then
 	    break
 	fi
@@ -50,10 +56,10 @@ fi
 
 echo "Droplet $DROPLET_NAME booted."
 
-IP_ADDRESS=`curl -s -X GET "$DO_API_URL/$DROPLET_ID" \
+IP_ADDRESS=$(curl -s -X GET "$DO_API_URL/$DROPLET_ID" \
 	-H "Authorization: Bearer $DO_TOKEN" \
 	-H "Content-Type: application/json" \
-	| jq -r '.droplet.networks.v4[] | select(.type == "public").ip_address'`
+	| jq -r '.droplet.networks.v4[] | select(.type == "public").ip_address')
 
 echo "Connecting to core@$IP_ADDRESS..."
 
