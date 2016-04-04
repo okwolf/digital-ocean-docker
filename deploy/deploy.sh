@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Make sure required environment variables are set
-: "${DO_TOKEN?}"
-: "${DO_SSH_KEY_FINGERPRINT?}"
-: "${DO_DOCKER_BUILD_REPO?}"
-: "${DO_DOCKER_RUN_OPTIONS?}"
+[ -z "$DO_TOKEN" ] && read -p "Enter your Digital Ocean token: " DO_TOKEN
+[ -z "$DO_SSH_KEY_FINGERPRINT" ] && read -p "Enter your SSH key fingerprint: " DO_SSH_KEY_FINGERPRINT
+[ -z "$DO_DOCKER_BUILD_REPO" ] && read -p "Enter the git repo you wish to deploy: " DO_DOCKER_BUILD_REPO
+[ -z "$DO_DOCKER_RUN_OPTIONS" ] && read -p "Enter any options to use when running: " DO_DOCKER_RUN_OPTIONS
 
 DO_API_URL=https://api.digitalocean.com/v2/droplets
 
