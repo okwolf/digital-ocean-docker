@@ -17,10 +17,10 @@ EOF
 )
 DROPLET_CREATE_RESULT=$(curl -s -X POST "$DO_API_URL" \
 	-d'{"name":"'"$DROPLET_NAME"'",
-	"region":"sfo1",
-	"size":"512mb",
+	"region":"'"${DO_REGION:=sfo1}"'",
+	"size":"'"${DO_SIZE:=512mb}"'",
 	"private_networking":true,
-	"image":"coreos-stable",
+	"image":"coreos-'"${DO_CHANNEL:=stable}"'",
 	"user_data":"'"$USER_DATA"'",
 	"ssh_keys":[ "'$DO_SSH_KEY_FINGERPRINT'" ]}' \
      -H "Authorization: Bearer $DO_TOKEN" \
