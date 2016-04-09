@@ -6,6 +6,15 @@
 [ -z "$DO_DOCKER_BUILD_REPO" ] && read -p "Enter the git repo you wish to build: " DO_DOCKER_BUILD_REPO
 [ -z "$DO_DOCKER_RUN_OPTIONS" ] && read -p "Enter any options to use when running: " DO_DOCKER_RUN_OPTIONS
 
+# Prompt for optional environment variables showing default values
+DEFAULT_DO_REGION=sfo1
+DEFAULT_DO_SIZE=512mb
+DEFAULT_DO_CHANNEL=stable
+[ -z "$DO_NAME_PREFIX" ] && read -p "Enter Droplet name prefix []: " DO_NAME_PREFIX
+[ -z "$DO_REGION" ] && read -p "Enter Droplet region [$DEFAULT_DO_REGION]: " DO_REGION
+[ -z "$DO_SIZE" ] && read -p "Enter Droplet size [$DEFAULT_DO_SIZE]: " DO_SIZE
+[ -z "$DO_CHANNEL" ] && read -p "Enter coreOS channel [$DEFAULT_DO_CHANNEL]: " DO_CHANNEL
+
 DO_API_URL=https://api.digitalocean.com/v2/droplets
 
 if [ -n "$DO_NAME_PREFIX" ]; then
@@ -20,10 +29,10 @@ EOF
 )
 DROPLET_CREATE_RESULT=$(curl -s -X POST "$DO_API_URL" \
 	-d'{"name":"'"$DROPLET_NAME"'",
-	"region":"'"${DO_REGION:=sfo1}"'",
-	"size":"'"${DO_SIZE:=512mb}"'",
+	"region":"'"${DO_REGION:=$DEFAULT_DO_REGION}"'",
+	"size":"'"${DO_SIZE:=$DEFAULT_DO_SIZE}"'",
 	"private_networking":true,
-	"image":"coreos-'"${DO_CHANNEL:=stable}"'",
+	"image":"coreos-'"${DO_CHANNEL:=$DEFAULT_DO_CHANNEL}"'",
 	"user_data":"'"$USER_DATA"'",
 	"ssh_keys":[ "'$DO_SSH_KEY_FINGERPRINT'" ]}' \
      -H "Authorization: Bearer $DO_TOKEN" \
