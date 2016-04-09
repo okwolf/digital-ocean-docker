@@ -3,12 +3,15 @@
 # Make sure required environment variables are set
 [ -z "$DO_TOKEN" ] && read -p "Enter your Digital Ocean token: " DO_TOKEN
 [ -z "$DO_SSH_KEY_FINGERPRINT" ] && read -p "Enter your SSH key fingerprint: " DO_SSH_KEY_FINGERPRINT
-[ -z "$DO_DOCKER_BUILD_REPO" ] && read -p "Enter the git repo you wish to deploy: " DO_DOCKER_BUILD_REPO
+[ -z "$DO_DOCKER_BUILD_REPO" ] && read -p "Enter the git repo you wish to build: " DO_DOCKER_BUILD_REPO
 [ -z "$DO_DOCKER_RUN_OPTIONS" ] && read -p "Enter any options to use when running: " DO_DOCKER_RUN_OPTIONS
 
 DO_API_URL=https://api.digitalocean.com/v2/droplets
 
-DROPLET_NAME=$(openssl rand -hex 6)
+if [ -n "$DO_NAME_PREFIX" ]; then
+	DROPLET_NAME="${DO_NAME_PREFIX}-"
+fi
+DROPLET_NAME+=$(openssl rand -hex 6)
 USER_DATA=$(cat <<EOF
 #!
 docker build -t deployment $DO_DOCKER_BUILD_REPO
