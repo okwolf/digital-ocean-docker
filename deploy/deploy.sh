@@ -27,6 +27,9 @@ docker build -t deployment $DO_DOCKER_BUILD_REPO
 docker run $DO_DOCKER_RUN_OPTIONS deployment
 EOF
 )
+
+DO_HEADERS=(-H "Authorization: Bearer $DO_TOKEN" -H "Content-Type: application/json")
+
 DROPLET_CREATE_RESULT=$(curl -s -X POST "$DO_API_URL" \
 	-d'{"name":"'"$DROPLET_NAME"'",
 	"region":"'"${DO_REGION:=$DEFAULT_DO_REGION}"'",
@@ -35,8 +38,7 @@ DROPLET_CREATE_RESULT=$(curl -s -X POST "$DO_API_URL" \
 	"image":"coreos-'"${DO_CHANNEL:=$DEFAULT_DO_CHANNEL}"'",
 	"user_data":"'"$USER_DATA"'",
 	"ssh_keys":[ "'$DO_SSH_KEY_FINGERPRINT'" ]}' \
-     -H "Authorization: Bearer $DO_TOKEN" \
-     -H "Content-Type: application/json")
+    "${DO_HEADERS[@]}")
 
 DROPLET_CREATE_STATUS=$(echo $DROPLET_CREATE_RESULT | jq -r '.droplet.status')
 if [ "$DROPLET_CREATE_STATUS" != "new" ]; then
@@ -48,9 +50,7 @@ DROPLET_ID=$(echo $DROPLET_CREATE_RESULT | jq '.droplet.id')
 echo "Droplet $DROPLET_NAME with ID $DROPLET_ID created!"
 echo -n "Waiting for Droplet $DROPLET_NAME to boot"
 for i in {1..60}; do
-	DROPLET_STATUS_RESULT=$(curl -s -X GET "$DO_API_URL/$DROPLET_ID" \
-	-H "Authorization: Bearer $DO_TOKEN" \
-	-H "Content-Type: application/json")
+	DROPLET_STATUS_RESULT=$(curl -s -X GET "$DO_API_URL/$DROPLET_ID" "${DO_HEADERS[@]}")
     DROPLET_STATUS=$(echo $DROPLET_STATUS_RESULT | jq -r '.droplet.status')
     if [ "$DROPLET_STATUS" == 'active' ]; then
 	    break
@@ -68,10 +68,8 @@ fi
 
 echo "Droplet $DROPLET_NAME booted."
 
-IP_ADDRESS=$(curl -s -X GET "$DO_API_URL/$DROPLET_ID" \
-	-H "Authorization: Bearer $DO_TOKEN" \
-	-H "Content-Type: application/json" \
-	| jq -r '.droplet.networks.v4[] | select(.type == "public").ip_address')
+IP_ADDRESS_RESULT=$(curl -s -X GET "$DO_API_URL/$DROPLET_ID" "${DO_HEADERS[@]}")
+IP_ADDRESS=$(echo $IP_ADDRESS_RESULT | jq -r '.droplet.networks.v4[] | select(.type == "public").ip_address')
 
 echo "Connecting to core@$IP_ADDRESS..."
 
