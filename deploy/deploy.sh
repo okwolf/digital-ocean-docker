@@ -24,7 +24,7 @@ DROPLET_NAME+=$(openssl rand -hex 6)
 USER_DATA=$(cat <<EOF
 #!
 docker build -t deployment $DO_DOCKER_BUILD_REPO
-docker run --restart=always $DO_DOCKER_RUN_OPTIONS deployment
+docker run $DO_DOCKER_RUN_OPTIONS deployment
 EOF
 )
 DROPLET_CREATE_RESULT=$(curl -s -X POST "$DO_API_URL" \
