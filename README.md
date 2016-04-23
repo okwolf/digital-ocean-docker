@@ -1,4 +1,6 @@
-Begin by running the following command:
+Begin by installing [Docker](https://www.docker.com) or install the prereqs by running `sudo apt-get install bash curl git openssl jq`.
+
+Now you are ready to kick off a new deployment:
 ```
 # git clone https://github.com/okwolf/digital-ocean-docker.git && cd digital-ocean-docker && ./run.sh
 Cloning into 'digital-ocean-docker'...
