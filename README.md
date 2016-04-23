@@ -57,22 +57,22 @@ Enter any options to use when running: -p 80:5000
 Enter Droplet name prefix []: training-webapp
 Enter Droplet region [sfo1]: 
 Enter Droplet size [512mb]: 
-Enter coreOS channel [stable]: 
+Enter CoreOS channel [stable]: 
 ```
 
 For reference here is a table of all available variables:
 
-| Variable              | Required| Default|
-| ----------------------|---------| -------|
-| DO_TOKEN              | YES     |        |
-| DO_DOCKER_BUILD_REPO  | YES     |        |
-| DO_DOCKER_RUN_OPTIONS | YES     |        |
-| DO_NAME_PREFIX        | NO      |        |
-| DO_REGION             | NO      | sfo1   |
-| DO_SIZE               | NO      | 512mb  |
-| DO_CHANNEL            | NO      | stable |
+| Variable              | Required| Default|Usage|
+| ----------------------|:-------:|:------:|-----|
+| DO_TOKEN              | YES     |        | Authenticates all Digital Ocean API communications, see https://cloud.digitalocean.com/settings/api/tokens to create one |
+| DO_DOCKER_BUILD_REPO  | YES     |        | Github repo to build with Docker |
+| DO_DOCKER_RUN_OPTIONS | YES     |        | Flags to give Docker when running, i.e. -p for binding ports |
+| DO_NAME_PREFIX        | NO      |        | Optional prefix to give Droplet for easier identification later. Names always include a unique suffix. 
+| DO_REGION             | NO      | sfo1   | Datacenter region for creating Droplet (nyc1, nyc2, nyc3, ams2, ams3, sfo1, sgp1, lon1, fra1, tor1) |
+| DO_SIZE               | NO      | 512mb  | Size of RAM to allocate for new machine, affects billing (512mb, 1gb, 2gb, 4gb, 8gb, 16gb, 32gb, 48gb, 64gb) |
+| DO_CHANNEL            | NO      | stable | Release channel to use for CoreOS, affects updates (alpha, beta, stable) |
 
-From here keys will be generated if not already existing and uploaded to Digital Ocean for use by the new Droplet so that we can connect after creation and show the logs of the Docker build and run progress:
+From here SSH keys will be generated if not already existing and uploaded to Digital Ocean for use by the new Droplet so that we can connect after creation and show the logs of the Docker build and run progress:
 ```
 Generating public/private rsa key pair.
 Your identification has been saved in /root/.ssh/id_rsa.
