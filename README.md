@@ -72,7 +72,7 @@ For reference here is a table of all available variables:
 | DO_NAME_PREFIX        | NO      |        | Optional prefix to give Droplet for easier identification later. Names always include a unique suffix. 
 | DO_REGION             | NO      | sfo1   | Datacenter region for creating Droplet (nyc1, nyc2, nyc3, ams2, ams3, sfo1, sgp1, lon1, fra1, tor1) |
 | DO_SIZE               | NO      | 512mb  | Size of RAM to allocate for new machine, affects billing (512mb, 1gb, 2gb, 4gb, 8gb, 16gb, 32gb, 48gb, 64gb) |
-| DO_CHANNEL            | NO      | stable | Release channel to use for CoreOS, affects updates (alpha, beta, stable) |
+| DO_CHANNEL            | NO      | stable | Release channel to use for [CoreOS](https://coreos.com/releases), affects updates (alpha, beta, stable) |
 
 From here SSH keys will be generated if not already existing and uploaded to Digital Ocean for use by the new Droplet so that we can connect after creation and show the logs of the Docker build and run progress:
 ```
