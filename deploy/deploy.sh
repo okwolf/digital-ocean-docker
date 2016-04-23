@@ -89,4 +89,4 @@ IP_ADDRESS=$(echo $IP_ADDRESS_RESULT | jq -r '.droplet.networks.v4[] | select(.t
 
 echo "Connecting to core@$IP_ADDRESS..."
 
-ssh -t -q -o "StrictHostKeyChecking no" core@$IP_ADDRESS "journalctl --no-tail -f _COMM=bash"
+ssh -t -q -o StrictHostKeyChecking=no -o ConnectTimeout=300 core@$IP_ADDRESS "journalctl --no-tail -f _COMM=bash"
