@@ -12,7 +12,7 @@ DEFAULT_DO_CHANNEL=stable
 [ -n "$DO_NAME_PREFIX" ] || read -p "Enter Droplet name prefix []: " DO_NAME_PREFIX
 [ -n "$DO_REGION" ] || read -p "Enter Droplet region [$DEFAULT_DO_REGION]: " DO_REGION
 [ -n "$DO_SIZE" ] || read -p "Enter Droplet size [$DEFAULT_DO_SIZE]: " DO_SIZE
-[ -n "$DO_CHANNEL" ] || read -p "Enter coreOS channel [$DEFAULT_DO_CHANNEL]: " DO_CHANNEL
+[ -n "$DO_CHANNEL" ] || read -p "Enter CoreOS channel [$DEFAULT_DO_CHANNEL]: " DO_CHANNEL
 
 DO_API_URL=https://api.digitalocean.com/v2
 DO_HEADERS=(-H "Authorization: Bearer $DO_TOKEN" -H "Content-Type: application/json")
