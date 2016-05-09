@@ -76,22 +76,22 @@ For reference here is a table of all available variables:
 
 From here SSH keys will be generated if not already existing and uploaded to Digital Ocean for use by the new Droplet so that we can connect after creation and show the logs of the Docker build and run progress:
 ```
-Generating public/private rsa key pair.
-Your identification has been saved in /root/.ssh/id_rsa.
-Your public key has been saved in /root/.ssh/id_rsa.pub.
+Generating public/private ecdsa key pair.
+Your identification has been saved in /root/.ssh/id_ecdsa.
+Your public key has been saved in /root/.ssh/id_ecdsa.pub.
 The key fingerprint is:
-SHA256:PJOrwhvuzkEuACcCPLau9gBMGSTfT/GchO4UMActnIQ root@023dd352e004
+SHA256:UXpTrtEn6o1wRrI8L1dswiqH80sQ+8XBoo3g1s/xeec root@6f6c053a0dfb
 The key's randomart image is:
-+---[RSA 2048]----+
-|=o +==o..        |
-|o=E.+o+= .       |
-|=o= .o..+        |
-|=+   oo. .       |
-|+.  .o. S        |
-|.o o  .  +       |
-|....+   .        |
-|...+oo .         |
-|. .+*o.          |
++---[ECDSA 256]---+
+|          . .    |
+|         + +     |
+|    . . = B + .  |
+|   . o B X B o   |
+|    o * S X +    |
+|   .   * % B     |
+|      + O B o .  |
+|       * o . o   |
+|        o.    E  |
 +----[SHA256]-----+
 Droplet training-webapp-9c765e893ee0 with ID 13946914 created!
 Waiting for Droplet training-webapp-9c765e893ee0 to boot...
@@ -210,5 +210,5 @@ Apr 23 03:05:26 training-webapp-9c765e893ee0 bash[1011]: ---> 2001035bdd07
 Apr 23 03:05:26 training-webapp-9c765e893ee0 bash[1011]: Removing intermediate container c196ca88b04c
 Apr 23 03:05:26 training-webapp-9c765e893ee0 bash[1011]: Successfully built 2001035bdd07
 Apr 23 03:05:26 training-webapp-9c765e893ee0 bash[1011]: * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
-Apr 23 03:05:52 training-webapp-9c765e893ee0 bash[1011]: 174.68.88.217 - - [23/Apr/2016 03:05:52] "GET / HTTP/1.1" 200 -
+Apr 23 03:05:52 training-webapp-9c765e893ee0 bash[1011]: 162.243.133.41 - - [23/Apr/2016 03:05:52] "GET / HTTP/1.1" 200 -
 ```
