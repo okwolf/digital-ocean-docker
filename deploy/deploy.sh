@@ -18,8 +18,8 @@ DO_API_URL=https://api.digitalocean.com/v2
 DO_HEADERS=(-H "Authorization: Bearer $DO_TOKEN" -H "Content-Type: application/json")
 
 if [ -z "$DO_SSH_KEY_FINGERPRINT" ]; then
-	SSH_KEY_PATH=~/.ssh/id_rsa
-	[ -f "$SSH_KEY_PATH" ] || ssh-keygen -t rsa -N "" -f $SSH_KEY_PATH
+	SSH_KEY_PATH=~/.ssh/id_ecdsa
+	[ -f "$SSH_KEY_PATH" ] || ssh-keygen -t ecdsa -N "" -f $SSH_KEY_PATH
 
 	ADD_KEY_RESULT=$(curl -s -X POST "$DO_API_URL/account/keys" \
 		-d'{"name":"'"$DROPLET_NAME"'",
